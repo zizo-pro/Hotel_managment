@@ -77,13 +77,35 @@ class mainapp(QMainWindow,FORM_CLASS):
         self.total_price.setText(f"Total price :  {int(self.price)*int(self.no_of_nights)}LE")
         self.confirm_button.show()
     
+    def clear(self):
+        self.Guest_full_name.setText("")
+        self.guest_phone_number.setText("")
+        self.guest_email.setText("")
+        self.adults_box.setValue(0)
+        self.children_box.setValue(0)
+        self.nights_box.setValue(0)
+        self.room_type_box.clear()
+        self.total_price.setText("Total price : ")
+        self.total_price_2.setText("Room Number: ")
+        self.add_guest_window()
+
+
+
+
+    def message_box(self):
+        self.message = QMessageBox()
+        self.message.setIcon(QMessageBox.Information)
+        self.message.setText(f"Guest Name:{self.guest_name}\nRoom Number: {self.room_number}")
+        self.message.setWindowTitle("Reservation Confirmation")
+        self.message.setStandardButtons(QMessageBox.Ok)
+        self.message.exec_()
+
     def confirmation(self):
         cr.execute("insert into guest (Name,Phone_number,Email,room_number,Nights,Adults,Children) VALUES (?,?,?,?,?,?,?)",(self.guest_name,self.guest_number,self.guest_mail,self.room_number,self.no_of_nights,self.no_of_adults,self.no_of_children))
-        message = QMessageBox()
-        message.setIcon(QMessageBox.Information)
-        message.setText(f"Guest Name:{self.guest_name}\nRoom Number: {self.room_number}")
+        self.message_box()
         db.commit()
-        db.close()
+        self.clear()
+
 if __name__ == "__main__":
     app = QApplication(argv)
     MainWindow = QtWidgets.QMainWindow()
